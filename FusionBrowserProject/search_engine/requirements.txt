@@ -1,5 +1,0 @@
-text
-    Flask
-    google-search-results
-    requests
-    gunicorn
