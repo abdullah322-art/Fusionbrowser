@@ -2,18 +2,19 @@ from flask import Flask, render_template, request
 from pymongo import MongoClient
 import os
 
-# --- رابط الاتصال الخاص بك مدمج هنا ---
+# --- Your Connection String is embedded here ---
+# تأكد أن هذا الرابط صحيح ويحتوي على اسم المستخدم وكلمة المرور الخاصة بك
 CONNECTION_STRING = "mongodb+srv://abdullahmuhammadfawzy244_db_user:d5F7VzJz8OpK53hz@cluster0.iurjyo7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 # --------------------------------------------------------
 
 app = Flask(__name__)
 
-# إعداد الاتصال بقاعدة البيانات
+# Setting up the database connection
 try:
     client = MongoClient(CONNECTION_STRING)
     db = client['fusion_search_db']
     collection = db['articles']
-    # التحقق من نجاح الاتصال
+    # Check if the connection is successful
     client.admin.command('ping')
     print("Success: You are now connected to MongoDB Atlas!")
 except Exception as e:
@@ -55,14 +56,9 @@ def home():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
 
-    # للتأكد من أن الخادم يعمل على Render
-    # قم بتشغيل الخادم باستخدام gunicorn وليس app.run()
-    # تأكد أن أمر التشغيل في Render هو: gunicorn search_engine.search_server:app
+    # This part of the code is not used by Render.
+    # It is a good practice to use gunicorn on production.
+    # The start command on Render should be: gunicorn search_engine.search_server:app
     print("Application is running...")
 
 
-
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-
-    app.run(host='0.0.0.0', port=port)
