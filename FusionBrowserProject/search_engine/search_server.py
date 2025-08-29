@@ -1,51 +1,38 @@
 # File: search_engine/search_server.py
-import os
 from flask import Flask, render_template, request
 from serpapi import GoogleSearch
+import os
 
-# --- التحسين: قراءة المفتاح السري من متغيرات البيئة بدلاً من كتابته مباشرة ---
-# هذه الطريقة أكثر أمانًا، خاصة عند رفع الكود على منصات مثل GitHub.
-SERPAPI_API_KEY = os.environ.get("SERPAPI_API_KEY")
-
-# التأكد من أن المفتاح موجود
-if not SERPAPI_API_KEY:
-    raise ValueError("لم يتم العثور على SERPAPI_API_KEY. يرجى تعيينه كمتغير بيئة.")
+# لقد قمنا فقط بتنظيف الكود من أي مسافات خاطئة
+SERPAPI_API_KEY = "12a39798f9404fd1828ec01bfe682428674f4dea"
 
 app = Flask(__name__)
 
 @app.route('/search')
 def search():
+    # الحصول على كلمة البحث من الرابط
     query = request.args.get('q', '')
     results_list = []
 
+    # إذا كان هناك كلمة للبحث عنها
     if query:
         try:
             params = {
               "q": query,
               "api_key": SERPAPI_API_KEY,
               "engine": "google",
-              # يمكنك إضافة المزيد من الإعدادات هنا حسب الحاجة
-              # "location": "Riyadh, Saudi Arabia",
-              # "hl": "ar",
-              # "gl": "sa"
             }
 
-            search = GoogleSearch(params)
-            results = search.get_dict()
+            google_search = GoogleSearch(params)
+            results = google_search.get_dict()
             
-            # (هذا الجزء قد تحتاج لتعديله حسب شكل النتائج التي تريد عرضها)
+            # استخراج نتائج البحث العضوية
             if 'organic_results' in results:
                 results_list = results['organic_results']
 
         except Exception as e:
-            print(f"An error occurred: {e}")
-            # يمكنك التعامل مع الخطأ هنا، مثلاً عرض رسالة للمستخدم
-            pass
+            print(f"حدث خطأ: {e}")
 
-    # يفترض أن لديك ملف HTML اسمه 'search_results.html' لعرض النتائج
-    return render_template('search_results.html', query=query, results=results_list)
-
-# هذا الجزء ضروري إذا كنت تريد تشغيل التطبيق محليًا للاختبار
-if __name__ == '__main__':
-    # سيتم تشغيل الخادم على المنفذ 5000 افتراضيًا
-    app.run(debug=True)
+    # عرض النتائج في صفحة HTML
+    # (تأكد من أن لديك ملف HTML بهذا الاسم)
+    return render_template('search_results.html', results=results_list)
