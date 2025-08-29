@@ -1,9 +1,7 @@
     # File: search_engine/search_server.py
-
     from flask import Flask, render_template, request
     from serpapi import GoogleSearch
     import os
-
     # --- مفتاحك السري مدمج هنا وجاهز للعمل ---
     SERPAPI_API_KEY = "12a39798f9404fd1828ec01bfe682428674f4dea"
     # --------------------------------------------------------
@@ -48,3 +46,4 @@
     if __name__ == '__main__':
         port = int(os.environ.get('PORT', 5000))
         app.run(host='0.0.0.0', port=port)
+
