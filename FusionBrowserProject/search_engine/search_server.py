@@ -1,6 +1,3 @@
-python
-# File: search_engine/search_server.py
-
 from flask import Flask, render_template, request
 from pymongo import MongoClient
 import os
@@ -57,4 +54,15 @@ def home():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
+
+    # للتأكد من أن الخادم يعمل على Render
+    # قم بتشغيل الخادم باستخدام gunicorn وليس app.run()
+    # تأكد أن أمر التشغيل في Render هو: gunicorn search_engine.search_server:app
+    print("Application is running...")
+
+
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+
     app.run(host='0.0.0.0', port=port)
